@@ -3,68 +3,44 @@ Aplicatie web monitorizare prezenta
 
  Checksy – Backend RESTful
 
-Checksy este o aplicație web pentru monitorizarea prezenței la evenimente.
-Backend-ul oferă un API REST care permite organizatorilor să creeze grupuri de evenimente, să adauge evenimente, să genereze coduri de acces și să înregistreze prezența participanților prin check-in.
+Checksy este un serviciu REST pentru gestionarea prezenței la evenimente.
+Permite crearea organizatorilor, grupurilor de evenimente, evenimentelor, coduri generate automat și check-in pentru participanți.
 
-Backend realizat în Node.js + Express + Prisma ORM cu stocare în MySQL.
+📥 Instalare & Setup
 
- 1. Funcționalități principale
+Urmărește pașii de mai jos pentru instalarea și rularea backend-ului.
 
-Înregistrare organizator
-
-Autentificare organizator
-
-Creare grupuri de evenimente
-
-Creare eveniment cu generare automată a codului de acces
-
-Check-in participanți
-
-Listare prezențe pentru un eveniment
-
-Listare evenimente
-
- 2. Tehnologii folosite
-
-Node.js
-
-Express.js
-
-Prisma ORM
-
-MySQL
-
-Postman (testare API)
-
- 3. Instrucțiuni de instalare și rulare
-3.1. Clonarea proiectului
+1. Clonează repository-ul
 git clone https://github.com/tomescuana-byte/Checksy.git
 cd Checksy/backend
 
-3.2. Instalarea dependențelor
+2. Instalează pachetele necesare
 npm install
 
-3.3. Configurarea bazei de date
+3. Configurează conexiunea la baza de date
 
 Creează fișierul .env în folderul backend:
 
 DATABASE_URL="mysql://root:PAROLA_TA@localhost:3306/checksy_db"
 
-3.4. Crearea tabelelor
+
+Înlocuiește PAROLA_TA cu parola reală de la MySQL.
+
+4. Creează tabelele în baza de date (Prisma migrate)
 npx prisma migrate dev
 
-3.5. Pornirea serverului
+5. Pornește serverul
 node index.js
 
 
-Serverul rulează la adresa:
+Serverul va rula la:
 
 http://localhost:3000
 
- 4. Endpoint-uri API
-4.1. POST /register
+🔌 API Endpoints
+▶ Register organizer
 
-Creează un organizator.
+POST /register
 
 Body:
 
@@ -75,33 +51,27 @@ Body:
   "parola": "1234"
 }
 
-4.2. POST /login
+▶ Login
 
-Autentificare organizator.
-
-Body:
+POST /login
 
 {
   "email": "clim@antonio.com",
   "parola": "1234"
 }
 
-4.3. POST /grupuri
+▶ Create group
 
-Creează un grup de evenimente.
-
-Body:
+POST /grupuri
 
 {
   "nume": "Evenimente ASE",
   "organizatorId": 1
 }
 
-4.4. POST /evenimente
+▶ Create event (codAcces se generează automat)
 
-Creează eveniment + generează automat codAcces.
-
-Body:
+POST /evenimente
 
 {
   "titlu": "Hackathon ASE",
@@ -109,11 +79,9 @@ Body:
   "grupEvenimenteId": 1
 }
 
-4.5. POST /checkin
+▶ Check-in participant
 
-Înregistrează prezența unui participant.
-
-Body:
+POST /checkin
 
 {
   "codAcces": "N6KPFE",
@@ -122,39 +90,26 @@ Body:
   "email": "annie.tomescu@gmail.com"
 }
 
-4.6. GET /evenimente/:id/prezente
-
-Listează toți participanții unui eveniment.
-
-4.7. GET /evenimente
-
-Listează toate evenimentele.
-
-4.8. GET /grupuri
-
-Listează toate grupurile de evenimente.
-
- 5. Structura proiectului
+📦 Structura proiectului
 backend/
  ├── index.js
- ├── package.json
  ├── prisma/
  │    ├── schema.prisma
  │    └── migrations/
+ ├── package.json
  ├── .env
  └── README.md
 
- 6. Starea proiectului (Etapa 2)
+📘 Usage
 
-Backend REST complet funcțional
+Poți testa API-ul folosind Postman.
+Importă request-urile și trimite payload-uri JSON conform exemplelor de mai sus.
 
-Prisma + MySQL configurate
+👩‍💻 Status proiect
 
-Generare cod de acces activă
-
-Endpoint-uri testate în Postman
-
-Documentație de rulare inclusă
-
-Proiect versionat în GitHub
+✓ API REST funcțional
+✓ Bază de date configurată
+✓ Cod acces generat automat
+✓ Endpoint-uri testate
+✓ Documentație de rulare inclusă
 
