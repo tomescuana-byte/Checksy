@@ -45,6 +45,7 @@ cd Checksy/backend
 npm install
 
 3.3. Configurarea bazei de date
+
 Creează fișierul .env în folderul backend:
 
 DATABASE_URL="mysql://root:PAROLA_TA@localhost:3306/checksy_db"
@@ -55,13 +56,16 @@ npx prisma migrate dev
 3.5. Pornirea serverului
 node index.js
 
+
 Serverul rulează la adresa:
+
 http://localhost:3000
 
-4. Endpoint-uri API
+ 4. Endpoint-uri API
 4.1. POST /register
 
 Creează un organizator.
+
 Body:
 
 {
@@ -74,6 +78,7 @@ Body:
 4.2. POST /login
 
 Autentificare organizator.
+
 Body:
 
 {
@@ -129,7 +134,7 @@ Listează toate evenimentele.
 
 Listează toate grupurile de evenimente.
 
-5. Structura proiectului
+ 5. Structura proiectului
 backend/
  ├── index.js
  ├── package.json
@@ -152,3 +157,4 @@ Endpoint-uri testate în Postman
 Documentație de rulare inclusă
 
 Proiect versionat în GitHub
+
