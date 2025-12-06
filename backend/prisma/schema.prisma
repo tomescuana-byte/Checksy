@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+   url      = env("DATABASE_URL")
+}
+
+
+model Organizator {
+  id                Int                 @id @default(autoincrement())
+  nume              String
+  prenume           String
+  email             String              @unique
+  parola            String
+  grupuriEvenimente GrupEvenimente[]
+
+  @@map("organizatori")
+}
+
+
+model GrupEvenimente {
+  id              Int             @id @default(autoincrement())
+  nume            String
+  organizator     Organizator     @relation(fields: [organizatorId], references: [id])
+  organizatorId   Int
+  evenimente      Eveniment[]
+
+  @@map("grupuri_evenimente")
+}
+
+
+model Eveniment {
+  id                Int               @id @default(autoincrement())
+  titlu             String
+  data              DateTime
+  stare             String            @default("INCHIS") // valori posibile: INCHIS / DESCHIS
+  codAcces          String            @unique
+  grupEvenimente    GrupEvenimente    @relation(fields: [grupEvenimenteId], references: [id])
+  grupEvenimenteId  Int
+  prezente          Prezenta[]
+
+  @@map("evenimente")
+}
+
+model Participant {
+  id          Int          @id @default(autoincrement())
+  nume        String
+  prenume     String
+  email       String?
+  prezente    Prezenta[]
+
+  @@map("participanti")
+}
+
+model Prezenta {
+  id            Int          @id @default(autoincrement())
+  moment        DateTime     @default(now())
+  eveniment     Eveniment    @relation(fields: [evenimentId], references: [id])
+  evenimentId   Int
+  participant   Participant  @relation(fields: [participantId], references: [id])
+  participantId Int
+
+  @@map("prezente")
+}
