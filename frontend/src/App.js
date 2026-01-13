@@ -29,7 +29,7 @@ function App() {
   const [mesaj, setMesaj] = useState("");
   const [error, setError] = useState("");
 
-  // QR scan (bonus)
+  // QR scan
   const [scanOn, setScanOn] = useState(false);
 
   // prezențe
