@@ -27,28 +27,47 @@ model Organizator {
 
 
 model GrupEvenimente {
-  id              Int             @id @default(autoincrement())
-  nume            String
-  organizator     Organizator     @relation(fields: [organizatorId], references: [id])
-  organizatorId   Int
-  evenimente      Eveniment[]
+  id            Int        @id @default(autoincrement())
+  nume          String
 
-  @@map("grupuri_evenimente")
+  organizatorId Int
+  organizator   Organizator @relation(fields: [organizatorId], references: [id])
+
+  evenimente    Eveniment[]
+
+  @@map("grupuri_evenimente") // opțional, dacă vrei nume tabel mai clar
+}
+
+enum StareEveniment {
+  OPEN
+  CLOSED
 }
 
 
 model Eveniment {
-  id                Int               @id @default(autoincrement())
-  titlu             String
-  data              DateTime
-  stare             String            @default("INCHIS") // valori posibile: INCHIS / DESCHIS
-  codAcces          String            @unique
-  grupEvenimente    GrupEvenimente    @relation(fields: [grupEvenimenteId], references: [id])
-  grupEvenimenteId  Int
-  prezente          Prezenta[]
+  id               Int      @id @default(autoincrement())
+  titlu            String
+
+  function parseDate(s) {
+  return s.endsWith("Z") ? new Date(s) : new Date(s + "Z");
+}
+
+start: parseDate(start),
+end: parseDate(end),
+
+
+  stare StareEveniment @default(CLOSED)
+  codAcces         String   @unique
+
+  
+  grupEvenimenteId Int
+  grupEvenimente   GrupEvenimente @relation(fields: [grupEvenimenteId], references: [id])
+
+  prezente         Prezenta[]
 
   @@map("evenimente")
 }
+
 
 model Participant {
   id          Int          @id @default(autoincrement())
@@ -61,12 +80,15 @@ model Participant {
 }
 
 model Prezenta {
-  id            Int          @id @default(autoincrement())
-  moment        DateTime     @default(now())
-  eveniment     Eveniment    @relation(fields: [evenimentId], references: [id])
-  evenimentId   Int
-  participant   Participant  @relation(fields: [participantId], references: [id])
-  participantId Int
+  id            Int      @id @default(autoincrement())
+  moment        DateTime @default(now())
 
-  @@map("prezente")
+  participantId Int
+  participant   Participant @relation(fields: [participantId], references: [id])
+
+  evenimentId   Int
+  eveniment     Eveniment @relation(fields: [evenimentId], references: [id])
+
+  @@unique([participantId, evenimentId])
 }
+
