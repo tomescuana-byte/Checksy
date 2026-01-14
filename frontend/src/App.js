@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { Html5QrcodeScanner } from "html5-qrcode";
 
-// IMPORTANT:
-// - În varianta cu NGROK FREE + 1 tunel: frontend build e servit de backend,
-//   deci folosim request-uri relative către backend: /api/...
-// - Localhost merge la fel (dacă deschizi site-ul din backend).
-const API_BASE = ""; // lăsat intenționat gol ca să fie same-origin
+
+// - DEV (React pe 3001) → backend pe 3000
+// - PROD / ngrok (same-origin) → ""
+const API_BASE =
+  process.env.REACT_APP_API_BASE ||
+  (window.location.port === "3001" ? "http://localhost:3000" : "");
+
 const API = `${API_BASE}/api`;
 
 function App() {
@@ -487,32 +489,24 @@ function App() {
                     <a
                       className="link"
                       href={`${API}/evenimente/${ev.id}/export?format=csv`}
-                      target="_blank"
-                      rel="noreferrer"
                     >
                       CSV (ev)
                     </a>
                     <a
                       className="link"
                       href={`${API}/evenimente/${ev.id}/export?format=xlsx`}
-                      target="_blank"
-                      rel="noreferrer"
                     >
                       XLSX (ev)
                     </a>
                     <a
                       className="link"
                       href={`${API}/grupuri/${ev.grupEvenimenteId}/export?format=csv`}
-                      target="_blank"
-                      rel="noreferrer"
                     >
                       CSV (grup)
                     </a>
                     <a
                       className="link"
                       href={`${API}/grupuri/${ev.grupEvenimenteId}/export?format=xlsx`}
-                      target="_blank"
-                      rel="noreferrer"
                     >
                       XLSX (grup)
                     </a>

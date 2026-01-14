@@ -25,6 +25,22 @@ function generateCode() {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 
+// ✅ FIX ORĂ EXPORT: format local pentru Excel/CSV (fără UTC "Z")
+function formatLocalDate(dt) {
+  if (!dt) return "";
+  const d = new Date(dt);
+  const pad = (n) => String(n).padStart(2, "0");
+
+  return (
+    `${d.getFullYear()}-` +
+    `${pad(d.getMonth() + 1)}-` +
+    `${pad(d.getDate())} ` +
+    `${pad(d.getHours())}:` +
+    `${pad(d.getMinutes())}:` +
+    `${pad(d.getSeconds())}`
+  );
+}
+
 // ------------------ middlewares ------------------
 app.use(cors());
 app.use(express.json());
@@ -297,14 +313,14 @@ app.get("/api/evenimente/:id/export", async (req, res) => {
     const rows = eveniment.prezente.map((p) => ({
       evenimentId: eveniment.id,
       titluEveniment: eveniment.titlu,
-      start: eveniment.start,
-      end: eveniment.end,
+      start: formatLocalDate(eveniment.start),
+      end: formatLocalDate(eveniment.end),
       stare: eveniment.stare,
       grupEvenimenteId: eveniment.grupEvenimenteId,
       nume: p.participant.nume,
       prenume: p.participant.prenume,
       email: p.participant.email || "",
-      momentCheckin: p.moment,
+      momentCheckin: formatLocalDate(p.moment),
     }));
 
     const safeName = (eveniment.titlu || "eveniment")
@@ -318,14 +334,23 @@ app.get("/api/evenimente/:id/export", async (req, res) => {
       XLSX.utils.book_append_sheet(wb, ws, "Prezente");
 
       const buffer = XLSX.write(wb, { type: "buffer", bookType: "xlsx" });
-      res.setHeader("Content-Disposition", `attachment; filename="prezente_eveniment_${id}_${safeName}.xlsx"`);
-      res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="prezente_eveniment_${id}_${safeName}.xlsx"`
+      );
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
       return res.send(buffer);
     }
 
     const parser = new Parser();
     const csv = parser.parse(rows);
-    res.setHeader("Content-Disposition", `attachment; filename="prezente_eveniment_${id}_${safeName}.csv"`);
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="prezente_eveniment_${id}_${safeName}.csv"`
+    );
     res.setHeader("Content-Type", "text/csv; charset=utf-8");
     return res.send(csv);
   } catch (err) {
@@ -357,13 +382,13 @@ app.get("/api/grupuri/:id/export", async (req, res) => {
           numeGrup: grup.nume,
           evenimentId: ev.id,
           titluEveniment: ev.titlu,
-          start: ev.start,
-          end: ev.end,
+          start: formatLocalDate(ev.start),
+          end: formatLocalDate(ev.end),
           stare: ev.stare,
           nume: p.participant.nume,
           prenume: p.participant.prenume,
           email: p.participant.email || "",
-          momentCheckin: p.moment,
+          momentCheckin: formatLocalDate(p.moment),
         });
       }
     }
@@ -379,14 +404,23 @@ app.get("/api/grupuri/:id/export", async (req, res) => {
       XLSX.utils.book_append_sheet(wb, ws, "Prezente");
 
       const buffer = XLSX.write(wb, { type: "buffer", bookType: "xlsx" });
-      res.setHeader("Content-Disposition", `attachment; filename="prezente_grup_${id}_${safeName}.xlsx"`);
-      res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="prezente_grup_${id}_${safeName}.xlsx"`
+      );
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
       return res.send(buffer);
     }
 
     const parser = new Parser();
     const csv = parser.parse(rows);
-    res.setHeader("Content-Disposition", `attachment; filename="prezente_grup_${id}_${safeName}.csv"`);
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="prezente_grup_${id}_${safeName}.csv"`
+    );
     res.setHeader("Content-Type", "text/csv; charset=utf-8");
     return res.send(csv);
   } catch (err) {
