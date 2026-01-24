@@ -34,9 +34,8 @@ pentru:
 
 ## Tehnologii utilizate
 - Frontend: HTML, CSS, JavaScript (SPA)
-- Backend: (ex: Node.js / Express) *(completezi ce ai tu)*
-- Bază de date: (ex: MongoDB / SQLite / MySQL)
-- Generare QR: (ex: qrcode.js)
+- Backend: Node.js / Express)
+- Bază de date:   MySQL)
 
 ## Rulare locală
 
