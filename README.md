@@ -1,115 +1,48 @@
-# Checksy
-Aplicatie web monitorizare prezenta
+# Checksy – Aplicație web pentru monitorizarea prezenței
 
- Checksy – Backend RESTful
+## Descriere
+Checksy este o aplicație web de tip **Single Page Application (SPA)** care permite organizatorilor să gestioneze evenimente și să monitorizeze prezența participanților în timp real, folosind coduri de acces (text sau QR).
 
-Checksy este un serviciu REST pentru gestionarea prezenței la evenimente.
-Permite crearea organizatorilor, grupurilor de evenimente, evenimentelor, coduri generate automat și check-in pentru participanți.
+Aplicația poate fi accesată din browser, atât de pe desktop, cât și de pe dispozitive mobile sau tablete.
 
-📥 Instalare & Setup
+## Funcționalități
 
-Urmărește pașii de mai jos pentru instalarea și rularea backend-ului.
+### Organizator de evenimente (OE)
+- Crearea unui **grup de evenimente** (unul singur sau evenimente recurente).
+- Fiecare eveniment are o stare:
+  - `CLOSED` – înainte și după desfășurare
+  - `OPEN` – în intervalul de timp programat
+- Generarea automată a unui **cod de acces** pentru fiecare eveniment:
+  - cod text
+  - cod QR
+- Afișarea codului pentru participanți (ex: proiector).
 
-1. Clonează repository-ul
-git clone https://github.com/tomescuana-byte/Checksy.git
-cd Checksy/backend
+### Participanți
+- Confirmarea prezenței prin:
+  - scanare cod QR cu telefonul
+  - introducere cod text
+- Înregistrarea automată a orei de prezență.
 
-2. Instalează pachetele necesare
+### Monitorizare și export
+- Vizualizarea listei de participanți prezenți, cu momentul confirmării.
+- Export date în:
+  - **CSV**
+  - **XLSX**
+pentru:
+  - un eveniment
+  - un grup de evenimente
+
+## Tehnologii utilizate
+- Frontend: HTML, CSS, JavaScript (SPA)
+- Backend: (ex: Node.js / Express) *(completezi ce ai tu)*
+- Bază de date: (ex: MongoDB / SQLite / MySQL)
+- Generare QR: (ex: qrcode.js)
+
+## Rulare locală
+
+```bash
+git clone https://github.com/username/checksy.git
+cd checksy
 npm install
-
-3. Configurează conexiunea la baza de date
-
-Creează fișierul .env în folderul backend:
-
-DATABASE_URL="mysql://root:PAROLA_TA@localhost:3306/checksy_db"
-
-
-Înlocuiește PAROLA_TA cu parola reală de la MySQL.
-
-4. Creează tabelele în baza de date (Prisma migrate)
-npx prisma migrate dev
-
-5. Pornește serverul
-node index.js
-
-
-Serverul va rula la:
-
-http://localhost:3000
-
-🔌 API Endpoints
-▶ Register organizer
-
-POST /register
-
-Body:
-
-{
-  "nume": "Clim",
-  "prenume": "Antonio",
-  "email": "clim@antonio.com",
-  "parola": "1234"
-}
-
-▶ Login
-
-POST /login
-
-{
-  "email": "clim@antonio.com",
-  "parola": "1234"
-}
-
-▶ Create group
-
-POST /grupuri
-
-{
-  "nume": "Evenimente ASE",
-  "organizatorId": 1
-}
-
-▶ Create event (codAcces se generează automat)
-
-POST /evenimente
-
-{
-  "titlu": "Hackathon ASE",
-  "data": "2025-12-20T10:00:00.000Z",
-  "grupEvenimenteId": 1
-}
-
-▶ Check-in participant
-
-POST /checkin
-
-{
-  "codAcces": "N6KPFE",
-  "nume": "Tomescu",
-  "prenume": "Annie",
-  "email": "annie.tomescu@gmail.com"
-}
-
-📦 Structura proiectului
-backend/
- ├── index.js
- ├── prisma/
- │    ├── schema.prisma
- │    └── migrations/
- ├── package.json
- ├── .env
- └── README.md
-
-📘 Usage
-
-Poți testa API-ul folosind Postman.
-Importă request-urile și trimite payload-uri JSON conform exemplelor de mai sus.
-
-👩‍💻 Status proiect
-
-✓ API REST funcțional
-✓ Bază de date configurată
-✓ Cod acces generat automat
-✓ Endpoint-uri testate
-✓ Documentație de rulare inclusă
+npm start
 
